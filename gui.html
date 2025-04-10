@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Journal Curator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Animation for status indicators */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Smooth transitions */
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <header class="mb-10">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-indigo-700">Research Journal</h1>
+                    <p class="text-gray-500">Curate knowledge, automated</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button id="settingsBtn" class="p-2 rounded-full hover:bg-gray-200 transition-all">
+                            <i class="fas fa-cog text-gray-600"></i>
+                        </button>
+                        <div id="settingsDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+                            <div class="py-1">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">API Settings</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Export Data</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Help</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold">U</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column - Topics Management -->
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Research Topics</h2>
+                    
+                    <div class="flex mb-4">
+                        <input type="text" id="newTopic" placeholder="Add a new research topic..." class="flex-grow px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button id="addTopicBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-r-lg hover:bg-indigo-700 transition-all">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="border border-gray-200 rounded-lg overflow-hidden">
+                        <div id="topicsList" class="max-h-96 overflow-y-auto">
+                            <!-- Sample topics -->
+                            <div class="topic-item flex justify-between items-center p-3 border-b border-gray-100 hover:bg-gray-50 transition-all">
+                                <span class="truncate">Latest advancements in quantum computing</span>
+                                <div class="flex space-x-2">
+                                    <button class="text-gray-400 hover:text-indigo-600 transition-all">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                    <button class="text-gray-400 hover:text-red-500 transition-all">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="topic-item flex justify-between items-center p-3 border-b border-gray-100 hover:bg-gray-50 transition-all">
+                                <span class="truncate">Impact of AI on creative industries</span>
+                                <div class="flex space-x-2">
+                                    <button class="text-gray-400 hover:text-indigo-600 transition-all">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                    <button class="text-gray-400 hover:text-red-500 transition-all">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="topic-item flex justify-between items-center p-3 border-b border-gray-100 hover:bg-gray-50 transition-all">
+                                <span class="truncate">Sustainable urban development trends</span>
+                                <div class="flex space-x-2">
+                                    <button class="text-gray-400 hover:text-indigo-600 transition-all">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                    <button class="text-gray-400 hover:text-red-500 transition-all">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Schedule</h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Frequency</label>
+                            <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option>Daily</option>
+                                <option>Weekly</option>
+                                <option>Bi-weekly</option>
+                                <option>Monthly</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Time</label>
+                            <input type="time" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" value="09:00">
+                        </div>
+                        
+                        <div>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="rounded text-indigo-600 focus:ring-indigo-500">
+                                <span class="text-sm text-gray-700">Email notifications</span>
+                            </label>
+                        </div>
+                        
+                        <button class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-all">
+                            Save Schedule
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Middle Column - Status -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-xl shadow-sm p-6 h-full">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Research Status</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 bg-blue-50 rounded-lg border border-blue-100">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-medium text-blue-800">Current Status</span>
+                                <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full">Active</span>
+                            </div>
+                            <p class="text-sm text-blue-700">Next update scheduled for tomorrow at 9:00 AM</p>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <h3 class="font-medium text-gray-700">Recent Activity</h3>
+                            
+                            <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-all">
+                                <div class="mt-1">
+                                    <div class="h-2 w-2 rounded-full bg-green-500 pulse"></div>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium">"Quantum computing" updated</p>
+                                    <p class="text-xs text-gray-500">2 hours ago</p>
+                                </div>
+                                <button class="text-gray-400 hover:text-indigo-600">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-all">
+                                <div class="mt-1">
+                                    <div class="h-2 w-2 rounded-full bg-green-500"></div>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium">"AI in creative industries" updated</p>
+                                    <p class="text-xs text-gray-500">1 day ago</p>
+                                </div>
+                                <button class="text-gray-400 hover:text-indigo-600">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-all">
+                                <div class="mt-1">
+                                    <div class="h-2 w-2 rounded-full bg-yellow-500"></div>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium">"Urban development" scheduled</p>
+                                    <p class="text-xs text-gray-500">3 days ago</p>
+                                </div>
+                                <button class="text-gray-400 hover:text-indigo-600">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-4 mt-4 border-t border-gray-200">
+                            <h3 class="font-medium text-gray-700 mb-3">API Usage</h3>
+                            <div class="bg-gray-100 rounded-lg p-3">
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>This month</span>
+                                    <span>23/100 calls</span>
+                                </div>
+                                <div class="w-full bg-gray-300 rounded-full h-2">
+                                    <div class="bg-indigo-600 h-2 rounded-full" style="width: 23%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column - Journal Directory -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-xl shadow-sm p-6 h-full">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Journal Directory</h2>
+                    
+                    <div class="mb-4">
+                        <div class="relative">
+                            <input type="text" placeholder="Search journals..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <div class="absolute left-3 top-2.5 text-gray-400">
+                                <i class="fas fa-search"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3 max-h-96 overflow-y-auto">
+                        <div class="journal-item p-3 border border-gray-200 rounded-lg hover:border-indigo-300 hover:shadow-sm transition-all">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-medium text-indigo-700">Quantum Computing</h3>
+                                    <p class="text-xs text-gray-500 mb-2">Updated: Today, 10:42 AM</p>
+                                </div>
+                                <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">Updated</span>
+                            </div>
+                            <p class="text-sm text-gray-600 line-clamp-2">Recent breakthroughs in quantum error correction and new developments from leading research labs...</p>
+                            <div class="flex justify-between items-center mt-3">
+                                <div class="flex space-x-2">
+                                    <span class="text-xs px-2 py-1 bg-gray-100 text-gray-800 rounded-full">Technology</span>
+                                    <span class="text-xs px-2 py-1 bg-gray-100 text-gray-800 rounded-full">Physics</span>
+                                </div>
+                                <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                                    View <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="journal-item p-3 border border-gray-200 rounded-lg hover:border-indigo-300 hover:shadow-sm transition-all">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-medium text-indigo-700">AI in Creative Industries</h3>
+                                    <p class="text-xs text-gray-500 mb-2">Updated: Yesterday, 9:15 AM</p>
+                                </div>
+                                <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full">New</span>
+                            </div>
+                            <p class="text-sm text-gray-600 line-clamp-2">How generative AI is transforming music, art, and writing, with case studies from major creative studios...</p>
+                            <div class="flex justify-between items-center mt-3">
+                                <div class="flex space-x-2">
+                                    <span class="text-xs px-2 py-1 bg-gray-100 text-gray-800 rounded-full">AI</span>
+                                    <span class="text-xs px-2 py-1 bg-gray-100 text-gray-800 rounded-full">Arts</span>
+                                </div>
+                                <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                                    View <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="journal-item p-3 border border-gray-200 rounded-lg hover:border-indigo-300 hover:shadow-sm transition-all">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-medium text-indigo-700">Urban Development</h3>
+                                    <p class="text-xs text-gray-500 mb-2">Updated: June 12, 9:00 AM</p>
+                                </div>
+                                <span class="text-xs px-2 py-1 bg-gray-100 text-gray-800 rounded-full">Scheduled</span>
+                            </div>
+                            <p class="text-sm text-gray-600 line-clamp-2">Innovative approaches to sustainable city planning and green infrastructure in major metropolitan areas...</p>
+                            <div class="flex justify-between items-center mt-3">
+                                <div class="flex space-x-2">
+                                    <span class="text-xs px-2 py-1 bg-gray-100 text-gray-800 rounded-full">Environment</span>
+                                    <span class="text-xs px-2 py-1 bg-gray-100 text-gray-800 rounded-full">Policy</span>
+                                </div>
+                                <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                                    View <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-sm text-gray-500">
+            <p>Research Journal Curator • Powered by Perplexity API</p>
+            <p class="mt-1">© 2023 Knowledge Automation Inc.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Toggle settings dropdown
+        document.getElementById('settingsBtn').addEventListener('click', function() {
+            const dropdown = document.getElementById('settingsDropdown');
+            dropdown.classList.toggle('hidden');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const settingsBtn = document.getElementById('settingsBtn');
+            const dropdown = document.getElementById('settingsDropdown');
+            
+            if (!settingsBtn.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Add new topic
+        document.getElementById('addTopicBtn').addEventListener('click', function() {
+            const input = document.getElementById('newTopic');
+            const topicText = input.value.trim();
+            
+            if (topicText) {
+                const topicsList = document.getElementById('topicsList');
+                const newTopic = document.createElement('div');
+                newTopic.className = 'topic-item flex justify-between items-center p-3 border-b border-gray-100 hover:bg-gray-50 transition-all';
+                newTopic.innerHTML = `
+                    <span class="truncate">${topicText}</span>
+                    <div class="flex space-x-2">
+                        <button class="text-gray-400 hover:text-indigo-600 transition-all">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                        <button class="text-gray-400 hover:text-red-500 transition-all">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                topicsList.prepend(newTopic);
+                input.value = '';
+                
+                // Add event listeners to new buttons
+                const editBtn = newTopic.querySelectorAll('button')[0];
+                const deleteBtn = newTopic.querySelectorAll('button')[1];
+                
+                editBtn.addEventListener('click', function() {
+                    // In a real app, this would open an edit modal
+                    alert('Edit functionality would go here');
+                });
+                
+                deleteBtn.addEventListener('click', function() {
+                    newTopic.remove();
+                });
+            }
+        });
+
+        // Allow adding topic with Enter key
+        document.getElementById('newTopic').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('addTopicBtn').click();
+            }
+        });
+
+        // Add event listeners to existing topic buttons
+        document.querySelectorAll('.topic-item').forEach(item => {
+            const buttons = item.querySelectorAll('button');
+            const editBtn = buttons[0];
+            const deleteBtn = buttons[1];
+            
+            editBtn.addEventListener('click', function() {
+                // In a real app, this would open an edit modal
+                alert('Edit functionality would go here');
+            });
+            
+            deleteBtn.addEventListener('click', function() {
+                item.remove();
+            });
+        });
+
+        // Journal item click handler
+        document.querySelectorAll('.journal-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                // Don't trigger if clicking on a button inside
+                if (!e.target.closest('button')) {
+                    // In a real app, this would open the journal
+                    alert('Opening journal for: ' + item.querySelector('h3').textContent);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
