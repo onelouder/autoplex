@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Journal - Curate knowledge, automated</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <h1>Research Journal</h1>
+                <p>Curate knowledge, automated</p>
+            </div>
+            <div class="header-actions">
+                <button id="settings-btn" class="icon-btn">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <div class="user-avatar">
+                    <span>U</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Research Topics</h2>
+                </div>
+                <div class="card-content">
+                    <div class="topic-input">
+                        <input type="text" id="new-topic-input" placeholder="Add a new research topic...">
+                        <button id="add-topic-btn" class="primary-btn">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div id="topics-list" class="topics-list">
+                        <!-- Topics will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Research Status</h2>
+                </div>
+                <div class="card-content">
+                    <div class="status-container">
+                        <div class="status-box">
+                            <h3>Current Status</h3>
+                            <p id="current-status">Loading...</p>
+                            <p id="next-update">Next update scheduled for: Loading...</p>
+                        </div>
+                    </div>
+                    <div class="recent-activity">
+                        <h3>Recent Activity</h3>
+                        <ul id="activity-list" class="activity-list">
+                            <!-- Activity items will be populated by JavaScript -->
+                        </ul>
+                    </div>
+                    <div class="api-usage">
+                        <h3>API Usage</h3>
+                        <div class="usage-box">
+                            <p id="api-usage-text">This month: <span id="api-usage-count">--</span>/100 calls</p>
+                            <div class="progress-bar">
+                                <div id="api-usage-bar" class="progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Journal Directory</h2>
+                </div>
+                <div class="card-content">
+                    <div class="search-box">
+                        <input type="text" id="journal-search" placeholder="Search journals...">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                    <div id="journal-entries" class="journal-entries">
+                        <!-- Journal entries will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Schedule</h2>
+                </div>
+                <div class="card-content">
+                    <form id="schedule-form" class="schedule-form">
+                        <div class="form-group">
+                            <label for="frequency">Frequency</label>
+                            <select id="frequency" name="frequency">
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="time">Time</label>
+                            <input type="time" id="time" name="time" value="09:00">
+                        </div>
+                        <div class="form-group checkbox">
+                            <input type="checkbox" id="email-notifications" name="email-notifications">
+                            <label for="email-notifications">Email notifications</label>
+                        </div>
+                        <button type="submit" id="save-schedule-btn" class="primary-btn full-width">
+                            Save Schedule
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Research Journal Curator • Powered by Perplexity API</p>
+            <p>© 2025 Knowledge Automation Inc.</p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="topic-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="topic-modal-title">Add Research Topic</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="topic-form">
+                    <input type="hidden" id="topic-id">
+                    <div class="form-group">
+                        <label for="topic-name">Topic Name</label>
+                        <input type="text" id="topic-name" required placeholder="e.g., Quantum Computing">
+                    </div>
+                    <div class="form-group">
+                        <label for="topic-query">Perplexity Query</label>
+                        <textarea id="topic-query" required placeholder="What are the latest advancements in quantum computing?"></textarea>
+                        <small>This query will be sent to the Perplexity API to generate your research.</small>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="cancel-topic-btn" class="secondary-btn">Cancel</button>
+                        <button type="submit" id="save-topic-btn" class="primary-btn">Save Topic</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirm Action</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message"></p>
+                <div class="form-actions">
+                    <button type="button" id="cancel-confirm-btn" class="secondary-btn">Cancel</button>
+                    <button type="button" id="confirm-btn" class="primary-btn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/topics.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/schedule.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/journal.js') }}"></script>
+</body>
+</html>

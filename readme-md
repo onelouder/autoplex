@@ -1,0 +1,200 @@
+# Research Journal: Automated Research Curation with Perplexity API
+
+Research Journal is a web application that helps you curate research topics, schedule automated Perplexity API searches, and maintain a structured journal of your findings. The application is designed for researchers, students, and knowledge workers who want to stay updated on specific topics without manual searching.
+
+## Features
+
+- **Topic Curation**: Create, edit, and manage research topics with custom search queries
+- **Automated Scheduling**: Set daily, weekly, or monthly update schedules
+- **Perplexity API Integration**: Leverage Perplexity's advanced AI to generate comprehensive research summaries
+- **Static HTML Journal**: Browse a searchable directory of generated research entries
+- **Status Monitoring**: Track API usage and view recent activity
+
+## Installation
+
+### Prerequisites
+
+- Python 3.9 or higher
+- pip (Python package manager)
+- Web browser (Chrome, Firefox, Safari, or Edge)
+- Perplexity API key ([Get one here](https://www.perplexity.ai/api))
+
+### Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/research-journal.git
+   cd research-journal
+   ```
+
+2. Create and activate a virtual environment:
+   ```bash
+   python -m venv venv
+   
+   # On Windows
+   venv\Scripts\activate
+   
+   # On macOS/Linux
+   source venv/bin/activate
+   ```
+
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Create a `.env` file in the project root with your Perplexity API key:
+   ```
+   PERPLEXITY_API_KEY=your_api_key_here
+   DAILY_BUDGET=5.0
+   SECRET_KEY=your_secret_key_for_flask
+   ```
+
+5. Create necessary directories:
+   ```bash
+   mkdir -p frontend/journal_html
+   ```
+
+## Running the Application
+
+1. Start the Flask application:
+   ```bash
+   cd backend
+   flask run
+   ```
+
+2. Open your web browser and navigate to:
+   ```
+   http://127.0.0.1:5000
+   ```
+
+## Usage Guide
+
+### Adding Research Topics
+
+1. Enter a topic name in the "Add a new research topic..." field
+2. Click the "+" button or press Enter
+3. In the modal dialog, enter:
+   - **Topic Name**: A descriptive name for your research area
+   - **Perplexity Query**: A specific question or prompt for the Perplexity API
+4. Click "Save Topic"
+
+### Managing Research Schedule
+
+1. Select update frequency (Daily, Weekly, or Monthly)
+2. Set the time for updates
+3. Optionally enable email notifications (requires email configuration)
+4. Click "Save Schedule"
+
+### Manual Research Updates
+
+1. Click the "Play" button next to any topic to run an immediate search
+2. The results will be processed and a new journal entry will be generated
+
+### Browsing Journal Entries
+
+1. Use the search box to filter entries by topic name or tags
+2. Click "View" to open a journal entry in a new tab
+3. Journal entries include:
+   - Research summary from Perplexity
+   - Source citations
+   - Tags for categorization
+   - Update timestamp
+
+## Project Structure
+
+```
+research_journal/
+│
+├── backend/               # Python backend
+│   ├── app.py             # Main Flask application
+│   ├── config.py          # Configuration settings
+│   ├── models.py          # Database models
+│   ├── perplexity_api.py  # Perplexity API integration
+│   ├── scheduler.py       # Task scheduling
+│   ├── journal_generator.py # HTML generation
+│   └── utils.py           # Utility functions
+│
+├── frontend/              # Web frontend
+│   ├── static/            # Static assets
+│   │   ├── css/
+│   │   │   └── style.css  # Main stylesheet
+│   │   ├── js/            # JavaScript files
+│   │   └── img/           # Images
+│   ├── templates/         # HTML templates
+│   └── journal_html/      # Generated journal entries
+│
+├── .env                   # Environment variables
+├── requirements.txt       # Python dependencies
+└── README.md              # Project documentation
+```
+
+## Customization
+
+### Modifying the Journal Template
+
+Edit `frontend/templates/journal_entry.html` to change the appearance and structure of generated journal entries.
+
+### Custom API Parameters
+
+Adjust the Perplexity API parameters in `backend/perplexity_api.py` to customize:
+- Model selection (different Perplexity models)
+- Maximum tokens
+- Temperature and top-p settings
+- System prompts
+
+### Email Notifications
+
+To enable email notifications:
+1. Update the email configuration in `.env`:
+   ```
+   MAIL_SERVER=smtp.example.com
+   MAIL_PORT=587
+   MAIL_USERNAME=your_email@example.com
+   MAIL_PASSWORD=your_password
+   MAIL_DEFAULT_SENDER=your_email@example.com
+   MAIL_USE_TLS=True
+   ```
+
+2. Implement email sending in `backend/utils.py` using the provided `send_email_notification` function
+
+## Technical Details
+
+- **Backend**: Flask (Python) with SQLAlchemy for database
+- **Scheduler**: APScheduler for task scheduling
+- **API Integration**: Custom Perplexity API client with error handling and rate limiting
+- **Frontend**: HTML5, CSS3, and vanilla JavaScript
+- **Data Storage**: SQLite database
+- **Journal Generation**: Jinja2 templates with markdown support
+
+## Troubleshooting
+
+### API Key Issues
+
+If you encounter errors with the Perplexity API:
+1. Verify your API key is correct in the `.env` file
+2. Check that you have sufficient credits in your Perplexity account
+3. Look for rate limiting messages in the application logs
+
+### Scheduling Problems
+
+If scheduled tasks aren't running:
+1. Ensure the Flask application is running continuously
+2. Check the system time is correct
+3. Verify your schedule settings in the database
+
+### Database Reset
+
+To reset the database:
+1. Stop the Flask application
+2. Delete the `app_data.db` file
+3. Restart the application (a new database will be initialized)
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Powered by [Perplexity API](https://www.perplexity.ai)
+- Built with Flask and modern web technologies
